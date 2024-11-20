@@ -3,10 +3,13 @@ package br.com.cotiinformatica.domain.services.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import br.com.cotiinformatica.domain.models.dtos.ClienteRequestDto;
 import br.com.cotiinformatica.domain.models.dtos.ClienteResponseDto;
 import br.com.cotiinformatica.domain.services.interfaces.ClienteDomainService;
 
+@Service
 public class ClienteDomainServiceImpl implements ClienteDomainService {
 
 	@Override

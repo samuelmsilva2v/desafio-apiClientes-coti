@@ -3,10 +3,13 @@ package br.com.cotiinformatica.domain.services.impl;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import br.com.cotiinformatica.domain.models.dtos.EnderecoRequestDto;
 import br.com.cotiinformatica.domain.models.dtos.EnderecoResponseDto;
 import br.com.cotiinformatica.domain.services.interfaces.EnderecoDomainService;
 
+@Service
 public class EnderecoDomainServiceImpl implements EnderecoDomainService {
 
 	@Override
