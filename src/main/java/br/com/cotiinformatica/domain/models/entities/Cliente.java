@@ -13,25 +13,25 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name ="tb_cliente")
+@Table(name = "tb_cliente")
 @Data
 public class Cliente {
 
 	@Id
 	private UUID id;
-	
+
 	@Column(nullable = false, length = 100)
 	private String nome;
-	
+
 	@Column(nullable = false)
 	private String email;
-	
+
 	@Column(nullable = false, unique = true, length = 11)
 	private String cpf;
-	
+
 	@Column(name = "data_nascimento", nullable = false)
 	private Date dataNascimento;
-	
+
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Endereco> enderecos;
+	private List<Endereco> enderecos;
 }
