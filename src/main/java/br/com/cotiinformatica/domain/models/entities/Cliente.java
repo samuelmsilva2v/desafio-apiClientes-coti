@@ -32,6 +32,6 @@ public class Cliente {
 	@Column(name = "data_nascimento", nullable = false)
 	private Date dataNascimento;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos;
 }
