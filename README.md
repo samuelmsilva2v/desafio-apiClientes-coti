@@ -1,27 +1,92 @@
-# Getting Started
+# Desafio Final Coti Informática - API Clientes
 
-### Reference Documentation
-For further reference, please consider the following sections:
+API RESTful desenvolvida em Java 21 utilizando o framework Spring Boot para gerenciar o cadastro de clientes e seus endereços. O projeto foi estruturado seguindo os princípios do Domain-Driven Design (DDD) e implementa operações de mensageria com RabbitMQ, além de validação de dados e persistência em um banco de dados relacional.
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/3.3.5/maven-plugin)
-* [Create an OCI image](https://docs.spring.io/spring-boot/3.3.5/maven-plugin/build-image.html)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/3.3.5/reference/data/sql.html#data.sql.jpa-and-spring-data)
-* [Spring Boot DevTools](https://docs.spring.io/spring-boot/3.3.5/reference/using/devtools.html)
-* [Spring Web](https://docs.spring.io/spring-boot/3.3.5/reference/web/servlet.html)
+## Funcionalidades
+- CRUD de Clientes:
+  - Criar, atualizar, listar e deletar clientes.
+- Gestão de Endereços:
+  - Associar múltiplos endereços a um cliente.
+- Mensageria com RabbitMQ:
+  - Envio de e-mails quando algum cliente é cadastrado.
+- Validação de Dados:
+  - Validações de campos obrigatórios, formatos e regras de negócio.
+- Logs de Processamento:
+  - Registro de operações na fila de mensageria.
 
-### Guides
-The following guides illustrate how to use some features concretely:
 
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
+## Tecnologias Usadas
+- Java 21
+- Spring Boot 3.3.5
+- Maven
+- Spring Data JPA
+- Spring Mail
+- Lombok
+- Bean Validation
+- ModelMapper
+- Swagger/OpenAPI
+- PostgreSQL
+- MongoDB
+- RabbitMQ
 
-### Maven Parent overrides
+## Endpoints e Requisições
 
-Due to Maven's design, elements are inherited from the parent POM to the project POM.
-While most of the inheritance is fine, it also inherits unwanted elements like `<license>` and `<developers>` from the parent.
-To prevent this, the project POM contains empty overrides for these elements.
-If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
+### Endpoints 
+| Método | Endpoint             | Descrição                   |
+|--------|-----------------------|-----------------------------|
+| POST   | `/api/clientes`      | Registra um novo cliente  |
+| GET    | `/api/clientes`      | Consulta todos os clientes e seus respectivos endereços  |
+| GET    | `/api/clientes/{id}` | Consulta um cliente e seus respectivos endereços através do seu ID  |
+| PUT    | `/api/clientes/{id}` | Atualiza um cliente através do seu ID  |
+| DELETE | `/api/clientes/{id}` | Remove um cliente através do seu ID  |
 
+### Exemplo de requisição
+Payload:
+```json
+[
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "nome": "string",
+    "cpf": "string",
+    "email": "string",
+    "dataNascimento": "2024-11-21T03:11:52.028Z",
+    "enderecos": [
+      {
+        "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "logradouro": "string",
+        "complemento": "string",
+        "numero": "string",
+        "bairro": "string",
+        "cidade": "string",
+        "uf": "st",
+        "cep": "string"
+      }
+    ]
+  }
+]
+```
+
+## Estrutura do projeto
+```plaintext
+br.com.cotiinformatica
+├── application
+│   ├── controllers          # Controladores REST
+├── domain
+│   ├── models               # Entidades e objetos de domínio
+│   │  ├── collections       # Coleções
+│   │  ├── dtos              # DTOs de entrada e saída
+│   │  └── entities          # Entidades
+│   └── services             # Lógica de domínio
+│   │  ├── impl              # Implementação 
+│   │  └── interfaces        # Métodos de serviço
+├── infrastructure
+│   ├── components           # Componentes
+│   ├── configurations       # Configurações
+│   └── repositories         # Repositórios
+└── DesafioApiClientesCotiApplication.java
+```
+
+### Autor
+- Samuel Maciel da Silva
+  - [LinkedIn](https://www.linkedin.com/in/samuelmsilva2v/)
+  - [E-mail](mailto:samuelmsilva@outlook.com.br)
