@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import br.com.cotiinformatica.domain.models.dtos.ClienteRequestDto;
 import br.com.cotiinformatica.domain.models.dtos.ClienteResponseDto;
+import br.com.cotiinformatica.domain.models.dtos.MensagemClienteResponse;
 import br.com.cotiinformatica.domain.models.entities.Cliente;
 import br.com.cotiinformatica.domain.models.entities.Endereco;
 import br.com.cotiinformatica.domain.services.interfaces.ClienteDomainService;
+import br.com.cotiinformatica.infrastructure.components.RabbitMQProducerComponent;
 import br.com.cotiinformatica.infrastructure.repositories.ClienteRepository;
 import br.com.cotiinformatica.infrastructure.repositories.EnderecoRepository;
 
@@ -28,6 +30,9 @@ public class ClienteDomainServiceImpl implements ClienteDomainService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private RabbitMQProducerComponent rabbitMQProducerComponent;
+	
 	@Override
 	public ClienteResponseDto cadastrar(ClienteRequestDto request) throws Exception {
 
@@ -47,6 +52,13 @@ public class ClienteDomainServiceImpl implements ClienteDomainService {
 
 		var endereco = cliente.getEnderecos().get(0);
 		enderecoRepository.save(endereco);
+		
+		var mensagem = new MensagemClienteResponse();
+		mensagem.setEmailDestinatario(cliente.getEmail());
+		mensagem.setAssunto("Confirmação de cadastro");
+		mensagem.setTexto("Olá, " + cliente.getNome() + ". Parabéns, seu cadastro foi realizado com sucesso!");
+		
+		rabbitMQProducerComponent.send(mensagem);
 
 		return modelMapper.map(cliente, ClienteResponseDto.class);
 	}
