@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.cotiinformatica.domain.models.dtos.ClienteRequestDto;
 import br.com.cotiinformatica.domain.models.dtos.ClienteResponseDto;
 import br.com.cotiinformatica.domain.services.impl.ClienteDomainServiceImpl;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -25,12 +26,12 @@ public class ClienteController {
 	private ClienteDomainServiceImpl clienteDomainServiceImpl;
 
 	@PostMapping
-	public ClienteResponseDto insert(@RequestBody ClienteRequestDto request) throws Exception {
+	public ClienteResponseDto insert(@RequestBody @Valid ClienteRequestDto request) throws Exception {
 		return clienteDomainServiceImpl.cadastrar(request);
 	}
 
 	@PutMapping("{id}")
-	public ClienteResponseDto update(@PathVariable UUID id, @RequestBody ClienteRequestDto request) throws Exception {
+	public ClienteResponseDto update(@PathVariable UUID id, @RequestBody @Valid ClienteRequestDto request) throws Exception {
 		return clienteDomainServiceImpl.atualizar(id, request);
 	}
 

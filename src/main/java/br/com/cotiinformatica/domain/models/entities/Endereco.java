@@ -20,6 +20,7 @@ public class Endereco {
 	
 	@Column(nullable = false)
 	private String logradouro;
+	
 	private String complemento;
 	
 	@Column(nullable = false)
