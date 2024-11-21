@@ -3,6 +3,8 @@ package br.com.cotiinformatica.domain.models.dtos;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +30,7 @@ public class ClienteRequestDto {
 	
 	@NotNull(message = "A data de nascimento é obrigatória.")
 	@Past(message = "A data de nascimento deve estar no passado.")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date dataNascimento;
 	
 	@NotNull(message = "A lista de endereços é obrigatória.")
