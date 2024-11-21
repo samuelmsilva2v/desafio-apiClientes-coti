@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.cotiinformatica.application.exceptions.ResourceNotFoundException;
 import br.com.cotiinformatica.domain.models.dtos.ClienteRequestDto;
 import br.com.cotiinformatica.domain.models.dtos.ClienteResponseDto;
 import br.com.cotiinformatica.domain.models.dtos.MensagemClienteResponse;
@@ -32,9 +33,17 @@ public class ClienteDomainServiceImpl implements ClienteDomainService {
 
 	@Autowired
 	private RabbitMQProducerComponent rabbitMQProducerComponent;
-	
+
 	@Override
 	public ClienteResponseDto cadastrar(ClienteRequestDto request) throws Exception {
+
+		if (clienteRepository.existsByEmail(request.getEmail())) {
+			throw new IllegalArgumentException("Email já cadastrado.");
+		}
+
+		if (clienteRepository.existsByCpf(request.getCpf())) {
+			throw new IllegalArgumentException("CPF já cadastrado.");
+		}
 
 		var cliente = modelMapper.map(request, Cliente.class);
 		cliente.setId(UUID.randomUUID());
@@ -52,12 +61,12 @@ public class ClienteDomainServiceImpl implements ClienteDomainService {
 
 		var endereco = cliente.getEnderecos().get(0);
 		enderecoRepository.save(endereco);
-		
+
 		var mensagem = new MensagemClienteResponse();
 		mensagem.setEmailDestinatario(cliente.getEmail());
 		mensagem.setAssunto("Confirmação de cadastro");
 		mensagem.setTexto("Olá, " + cliente.getNome() + ". Parabéns, seu cadastro foi realizado com sucesso!");
-		
+
 		rabbitMQProducerComponent.send(mensagem);
 
 		return modelMapper.map(cliente, ClienteResponseDto.class);
@@ -66,7 +75,8 @@ public class ClienteDomainServiceImpl implements ClienteDomainService {
 	@Override
 	public ClienteResponseDto atualizar(UUID id, ClienteRequestDto request) throws Exception {
 
-		var cliente = clienteRepository.findById(id).get();
+		var cliente = clienteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com ID: " + id));
 
 		modelMapper.map(request, cliente);
 
@@ -106,7 +116,8 @@ public class ClienteDomainServiceImpl implements ClienteDomainService {
 	@Override
 	public ClienteResponseDto excluir(UUID id) throws Exception {
 
-		var cliente = clienteRepository.findById(id).get();
+		var cliente = clienteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com ID: " + id));
 
 		if (cliente.getEnderecos() != null && !cliente.getEnderecos().isEmpty())
 			enderecoRepository.deleteAll(cliente.getEnderecos());
@@ -119,7 +130,8 @@ public class ClienteDomainServiceImpl implements ClienteDomainService {
 	@Override
 	public ClienteResponseDto obterPorId(UUID id) throws Exception {
 
-		var cliente = clienteRepository.findById(id).get();
+		var cliente = clienteRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com ID: " + id));
 
 		return modelMapper.map(cliente, ClienteResponseDto.class);
 	}

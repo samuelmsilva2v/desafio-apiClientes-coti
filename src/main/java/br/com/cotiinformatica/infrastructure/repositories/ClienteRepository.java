@@ -10,4 +10,7 @@ import br.com.cotiinformatica.domain.models.entities.Cliente;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
 
+	boolean existsByEmail(String email);
+	
+	boolean existsByCpf(String cpf);
 }
