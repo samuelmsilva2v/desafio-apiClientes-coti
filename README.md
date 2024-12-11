@@ -71,6 +71,8 @@ Payload:
 br.com.cotiinformatica
 ├── application
 │   ├── controllers          # Controladores REST
+│   ├── handlers             # Handlers
+│   └── exceptions           # Exceptions
 ├── domain
 │   ├── models               # Entidades e objetos de domínio
 │   │  ├── collections       # Coleções
