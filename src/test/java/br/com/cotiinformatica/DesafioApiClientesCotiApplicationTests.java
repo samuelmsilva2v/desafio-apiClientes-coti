@@ -127,10 +127,9 @@ class DesafioApiClientesCotiApplicationTests {
 
 		// Verificando se os dados da resposta coincidem com os da requisição
 		assertEquals(response.getId(), id);
-		assertNotNull(response.getNome());
-		assertNotNull(request.getNome(), response.getNome());
-		assertNotNull(request.getEmail(), response.getEmail());
-		assertNotNull(request.getCpf(), response.getCpf());
+		assertEquals(request.getNome(), response.getNome());
+		assertEquals(request.getEmail(), response.getEmail());
+		assertEquals(request.getCpf(), response.getCpf());
 	}
 
 	@Test
@@ -153,7 +152,20 @@ class DesafioApiClientesCotiApplicationTests {
 	@Test
 	@Order(4)
 	void obterPorIdTest() throws Exception {
-		fail("Não implementado.");
+		
+		var result = mockMvc.perform(get("/api/clientes/" + id))
+				.andExpect(status().isOk())
+				.andReturn();
+		
+		var content = result.getResponse()
+				.getContentAsString(StandardCharsets.UTF_8);
+		
+		var response = objectMapper.readValue(content, ClienteResponseDto.class);
+		
+		assertEquals(response.getId(), id); 
+		assertNotNull(response.getNome()); 
+		assertNotNull(response.getEmail()); 
+		assertNotNull(response.getCpf()); 
 	}
 
 	@Test
