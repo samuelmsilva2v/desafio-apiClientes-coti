@@ -3,6 +3,7 @@ package br.com.cotiinformatica;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 
@@ -134,7 +136,18 @@ class DesafioApiClientesCotiApplicationTests {
 	@Test
 	@Order(3)
 	void consultarClientesTest() throws Exception {
-		fail("Não implementado.");
+		
+		var result = mockMvc.perform(get("/api/clientes"))
+				.andExpect(status().isOk())
+				.andReturn();
+		
+		var content = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+		
+		var response = objectMapper.readValue(content, new TypeReference<List<ClienteResponseDto>>() {});
+		
+		response.stream().filter(produto -> produto.getId().equals(id))
+			.findFirst()
+			.orElseThrow(() -> new AssertionError("Produto não encontrado com ID: " + id));
 	}
 
 	@Test
