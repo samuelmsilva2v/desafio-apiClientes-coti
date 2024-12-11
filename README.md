@@ -1,6 +1,6 @@
 # Desafio Final Coti Informática - API Clientes
 
-API RESTful desenvolvida em Java 21 utilizando o framework Spring Boot para gerenciar o cadastro de clientes e seus endereços. O projeto foi estruturado seguindo os princípios do Domain-Driven Design (DDD) e implementa operações de mensageria com RabbitMQ, além de validação de dados e persistência em um banco de dados relacional.
+API RESTful desenvolvida em Java 21 utilizando o framework Spring Boot para gerenciar o cadastro de clientes e seus endereços. O projeto foi estruturado seguindo os princípios do **Domain-Driven Design (DDD)** e implementa operações de mensageria com RabbitMQ, além de validação de dados e persistência em um banco de dados relacional.
 
 ## Funcionalidades
 - CRUD de Clientes:
@@ -16,18 +16,23 @@ API RESTful desenvolvida em Java 21 utilizando o framework Spring Boot para gere
 
 
 ## Tecnologias Usadas
-- Java 21
-- Spring Boot 3.3.5
-- Maven
-- Spring Data JPA
-- Spring Mail
-- Lombok
-- Bean Validation
-- ModelMapper
-- Swagger/OpenAPI
-- PostgreSQL
-- MongoDB
-- RabbitMQ
+* Back-end:
+  * Java 21
+  * Spring Boot 3.3.5
+  * Spring Data JPA
+  * Spring Web
+  * Spring AMQP (RabbitMQ)
+  * Bean Validation
+  * ModelMapper
+* Banco de dados:
+  * PostgreSQL
+  * MongoDB
+* Mensageria:
+  * RabbitMQ
+* Ferramentas:
+  * Maven
+  * Swagger/OpenAPI para documentação
+  * Postman para testes  
 
 ## Endpoints e Requisições
 
@@ -66,26 +71,51 @@ Payload:
 ]
 ```
 
-## Estrutura do projeto
+## Requisitos
+
+* Java 21 ou superior.
+* Maven para gerenciamento de dependências.
+* PostgreSQL para persistência dos dados.
+* MongoDB para gravação de logs.
+
+### Executando o projeto:
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/samuelmsilva2v/desafio-apiClientes-coti.git
+cd api-clientes-coti
+```
+2. Execute os testes:
+```bash
+./mvnw test
+```
+3. Compile e inicie o projeto:
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
+## Estrutura do Projeto
+O projeto segue uma estrutura modular baseada nos princípios de **Domain-Driven Design (DDD)**, separando responsabilidades entre `application`, `domain` e `infrastructure`. Abaixo está a organização detalhada:
+
 ```plaintext
-br.com.cotiinformatica
-├── application
-│   ├── controllers          # Controladores REST
-│   ├── handlers             # Handlers
-│   └── exceptions           # Exceptions
-├── domain
-│   ├── models               # Entidades e objetos de domínio
-│   │  ├── collections       # Coleções
-│   │  ├── dtos              # DTOs de entrada e saída
-│   │  └── entities          # Entidades
-│   └── services             # Lógica de domínio
-│   │  ├── impl              # Implementação 
-│   │  └── interfaces        # Métodos de serviço
-├── infrastructure
-│   ├── components           # Componentes
-│   ├── configurations       # Configurações
-│   └── repositories         # Repositórios
-└── DesafioApiClientesCotiApplication.java
+├── application: Camada responsável por expor os endpoints REST e lidar com exceções.
+│   ├── controllers: Controladores REST para lidar com as requisições HTTP.
+│   ├── handlers: Tratamento global de exceções.
+│   └── exceptions: Classes para personalizar erros específicos.
+├── domain: Contém a lógica de negócios e os modelos principais do sistema.
+│   ├── models: Define entidades, coleções e DTOs.
+│   │   ├── collections: Classes para trabalhar com MongoDB ou coleções análogas.
+│   │   ├── dtos: DTOs para entrada e saída de dados.
+│   │   └── entities: Entidades que mapeiam o domínio.
+│   ├── services: Implementação e interfaces para lógica de negócios.
+│       ├── impl: Implementações dos serviços.
+│       └── interfaces: Interfaces que definem os métodos dos serviços.
+├── infrastructure: Camada de infraestrutura e integração com ferramentas externas.
+│   ├── components: Classes auxiliares e ferramentas, como RabbitMQ.
+│   ├── configurations: Configurações de beans e propriedades.
+│   └── repositories: Interfaces de acesso ao banco de dados.
+└── DesafioApiClientesCotiApplication.java: Classe principal do projeto.
 ```
 
 ### Autor
